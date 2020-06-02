@@ -1,0 +1,42 @@
+{
+  "name": "recipe-app",
+  "version": "1.0.0",
+  "description": "An app to keep track of your recipes, and what you need to buy to make them!",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node server/server.js",
+    "build": "cross-env NODE_ENV=production webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickhealy/Recipe-App.git"
+  },
+  "author": "Nick Healy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickhealy/Recipe-App/issues"
+  },
+  "homepage": "https://github.com/nickhealy/Recipe-App#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "babel-loader": "^8.1.0",
+    "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
+    "css-loader": "^3.5.3",
+    "html-loader": "^1.1.0",
+    "html-webpack-plugin": "^4.3.0",
+    "nodemon": "^2.0.4",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.16",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}
