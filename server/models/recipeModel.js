@@ -18,12 +18,7 @@ const recipeSchema = new Schema({
   tags: [String],
   favorite: Boolean,
   recipe: String,
-  notes: [
-    {
-      date: Date,
-      notes: String,
-    }
-  ]
+  notes: String
 })
 
 const Recipe = mongoose.model('recipe', recipeSchema); 

@@ -1,0 +1,98 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 16px; 
+}
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+body, html, .app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: relative; 
+}
+
+:root {
+  --headline-blue: lightblue; 
+  --dark-gray: darkgray; 
+}
+
+/* container for recipes */
+
+#daysContainer {
+  width: 90%;
+  height: 50%; 
+  display: grid; 
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.day-display {
+  width: 80%;
+  height: 15rem; 
+  margin: 1rem .5rem; 
+  border: 1px solid var(--dark-gray); 
+  border-radius: 5px; 
+}
+
+.header {
+  display: flex; 
+  justify-content: center;
+  width: 100%; 
+  padding: .5rem;
+  background-color: var(--headline-blue);
+}
+
+.day-display ul {
+  padding: .5rem; 
+}
+
+/* layout specifics for individual cards */
+.day-display.Monday {
+  grid-column: 1 / 3;
+}
+
+.day-display.Tuesday {
+  grid-column: 3 / 5;
+}
+
+.day-display.Wednesday {
+  grid-column: 5 / 7;
+}
+
+.day-display.Thursday {
+  grid-column: 7 / 9;
+}
+
+.day-display.Friday {
+  grid-column: 2 / 4;
+}
+.day-display.Saturday {
+  grid-column: 4 / 6;
+}
+.day-display.Sunday {
+  grid-column: 6 / 8;
+}
+
+/* recipeDisplay */
+
+.recipe-display {
+  padding: .3rem; 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .3rem; 
+  background-color: rgb(224, 255, 245);
+  border-radius: 5px; 
+  cursor: pointer;
+}
+

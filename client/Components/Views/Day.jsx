@@ -1,7 +1,7 @@
 import React from 'react'
 import RecipeDisplay from './RecipeDisplay';
 
-const Day = ({day, recipeList, recipes}) => {
+const Day = ({day, recipeList, recipes, toggleRecipeSearch}) => {
   const recipeDisplays = [];
   
   recipeList.forEach(recipeId => {
@@ -16,8 +16,12 @@ const Day = ({day, recipeList, recipes}) => {
     })
   })
   return(
-    <div className='day-display'>
-      <header>{day}</header>
+    <div className={`day-display ${day}`}>
+      <header className='header'>
+        {day}
+        {/* on click, set current modal to be recipe search, pass in current day to later invoke setDayInFocus on it */}
+        <button className='btn add-recipe' onClick={() => toggleRecipeSearch(day)}>+</button>
+      </header>
       <ul>
         {recipeDisplays}
       </ul>
