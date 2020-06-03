@@ -1,5 +1,5 @@
 const path = require('path');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -9,10 +9,14 @@ module.exports = {
     path: path.resolve(__dirname, './build'),
     filename: 'bundle.js'
   },
-  mode: 'production',
-  // devServer: {
-  //   publicPath: '/build/',
-  // },
+  mode: process.env.NODE_ENV,
+  devServer: {
+    contentBase: './build/',
+    publicPath: '/build/',
+    proxy: {
+      '/recipes': 'http://localhost:3000'
+    }
+  },
   module: {
     rules: [
       {
@@ -39,11 +43,11 @@ module.exports = {
       // },
     ]
   },
-  // plugins: [
-  //   new HtmlWebpackPlugin({
-  //     template: './client/index.html'
-  //   })
-  // ],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './client/index.html'
+    })
+  ],
   resolve: {
     extensions: ['.js', '.jsx']
   }

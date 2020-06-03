@@ -1,15 +1,5 @@
 const mongoose = require('mongoose'); 
 
-const MONGO_URI = `mongodb+srv://nickrhealy:NrhsjHrLs1926@cluster0-20m9a.mongodb.net/test?retryWrites=true&w=majority`; 
-
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  dbName: 'Recipe-App'
-})
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.log(err)); 
-
 const Schema = mongoose.Schema; 
 
 // model for all recipe additions to DB
@@ -25,14 +15,13 @@ const recipeSchema = new Schema({
       amount: String
     }
   ],
+  tags: [String],
+  favorite: Boolean,
   recipe: String,
-  history: [
+  notes: [
     {
       date: Date,
       notes: String,
-      pictures: [
-        String
-      ]
     }
   ]
 })

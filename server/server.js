@@ -24,6 +24,19 @@ app.get('*', (req, res) => {
   res.sendStatus(404); 
 })
 
+app.use((err, req, res, next) => {
+  // create default error
+  const defaultErr = {
+    log: 'Express middleware caught unknown error', 
+    status: 400, 
+    message: { err: 'An Error occured'}
+  }; 
+  const errObj = Object.assign({}, defaultErr, err); 
+  console.log(errObj);
+  // send back created error's status, with error's message as JSON
+  res.status(errObj.status).json(errObj.message);
+})
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 });
