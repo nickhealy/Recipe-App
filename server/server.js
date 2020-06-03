@@ -11,6 +11,7 @@ app.use(express.json());
 // serve static files **REMEMBER TO DO THIS!!!*
 app.use('/build', express.static(path.resolve(__dirname, '../build')));
 
+
 // serve homepage
 app.get('/', (req,res) => {
   res.status(200).sendFile(path.resolve(__dirname, '../client/index.html'))

@@ -12,7 +12,8 @@ module.exports = {
   mode: process.env.NODE_ENV,
   devServer: {
     contentBase: './build/',
-    publicPath: '/build/',
+    hot: true,
+    publicPath: '/',
     proxy: {
       '/recipes': 'http://localhost:3000'
     }

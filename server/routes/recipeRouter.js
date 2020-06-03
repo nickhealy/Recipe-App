@@ -9,8 +9,8 @@ router.get('/',
   recipeController.getRecipes,
   weekdayController.getDays,
   (req,res) => res.status(200).json({
-    recipes : {...res.locals.recipes},
-    days: {...res.locals.days}
+    recipes : [...res.locals.recipes],
+    days: [...res.locals.days]
   })
 );
 
@@ -21,8 +21,8 @@ router.post('/:day',
   weekdayController.updateDay,
   weekdayController.getDays,
   (req, res) => res.status(200).json({
-    recipes : {...res.locals.recipes},
-    days: {...res.locals.days}
+    recipes : [...res.locals.recipes],
+    days: [...res.locals.days]
   })
 );
 
