@@ -46,7 +46,11 @@ router.delete('/:id',
 router.put('/:id',
   recipeController.editRecipe,
   recipeController.getRecipes,
-  (req, res) => res.status(200).json({...res.locals.recipes})
+  weekdayController.getDays,
+  (req,res) => res.status(200).json({
+    recipes : [...res.locals.recipes],
+    days: [...res.locals.days]
+  })
 );
 
 

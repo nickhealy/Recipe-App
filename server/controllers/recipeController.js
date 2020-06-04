@@ -51,10 +51,9 @@ recipeController.deleteRecipe = (req, res, next) => {
 recipeController.editRecipe = (req, res, next) => {
   const id = req.params.id; 
   // store body info as variables
-  const { title, ingredients, recipe, notes, tags, favorite } = req.body; 
-
+  const { title, ingredients, recipe, notes, favorite, tags } = req.body; 
   // edit desired recipe in DB with passed
-  Recipe.findByIdAndUpdate(id, { title, ingredients, recipe, notes, tags, favorite }, (err, recipe) => {
+  Recipe.findByIdAndUpdate(id, { title, ingredients, recipe, notes, tags, favorite },{ new: true}, (err, recipe) => {
     if (err) return next({
       log: `Error with recipeController.editRecipe, err: ${err}`,
       message: 'Error. Check server log for details'

@@ -52,6 +52,8 @@ class App extends Component {
     this.populateCalendar = this.populateCalendar.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
+    this.deleteRecipe = this.deleteRecipe.bind(this);
+    this.editRecipe = this.editRecipe.bind(this);
   }
 
   componentDidMount() {
@@ -71,6 +73,7 @@ class App extends Component {
      fetch(`http://${domain}/recipes`)
      .then(res => res.json())
      .then(data => {
+       console.log('from GET :', data)
        this.setState({
          fetching: false,
          ...data
@@ -205,6 +208,42 @@ class App extends Component {
     // })
   }
 
+  editRecipe(e){
+    e.preventDefault();
+  
+    // make Put, passing in _id of desired recipe, stored in state.recipeInFocus
+    fetch(`http://${domain}/recipes/${this.state.recipeInFocus._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state.newRecipe)
+    })
+      .then(res => res.json())
+    // post sends back all the current recipes, so reset state to be whatever comes back
+      .then(data => {
+        console.log('just got back :  ', data)
+        this.setState({
+          fetching: false,
+          ...data
+        });
+      })
+      .catch(err => console.log(err))
+    
+    // so components don't render before they are ready
+    this.setState({
+      fetching: true,
+      recipeInFocus: '',
+      // remember to close modal
+      modalVisible: false
+    })
+  }
+
+  // deletes ar ecipe
+  deleteRecipe(){
+
+  }
+
   closeModal(e){
     if (this.state.modalVisible && e.target.className === 'modal-container') {
       console.log('closing modal')
@@ -230,7 +269,13 @@ class App extends Component {
       case 'ViewRecipe':
         return <ViewRecipe recipe={this.state.recipeInFocus} toggleEditRecipe={this.toggleEditRecipe}/>
       case 'EditRecipe':
-        return <EditRecipe />
+        return <EditRecipe
+          newRecipe={this.state.newRecipe} 
+          updateNewRecipe={this.updateNewRecipe} 
+          newIngredient={this.state.newIngredient}
+          updateNewIngredient={this.updateNewIngredient}
+          addNewIngredient={this.addNewIngredient}
+          editRecipe={this.editRecipe}/>
       default:
         return '';
     }
@@ -265,11 +310,18 @@ class App extends Component {
     this.getRecipeInfo(id);
   }
 
-  toggleEditRecipe() {
-    // toggles modal that will allow us to edit recipe
+  toggleEditRecipe(id) {
+
     this.setState({
+      // toggles modal that will allow us to edit recipe
       modalVisible: true,
-      modal: 'EditRecipe'
+      modal: 'EditRecipe',
+      // save current recipe's info as new recipe, so it can be rendered in edit recipe page, spread for good measure
+      newRecipe: {
+        ...this.state.recipeInFocus,
+        ingredients: [...this.state.recipeInFocus.ingredients],
+        tags: [...this.state.recipeInFocus.tags]
+      },
     })
   }
 

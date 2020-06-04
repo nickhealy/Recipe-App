@@ -1,12 +1,16 @@
 import React from 'react';
 import IngredientDisplay from '../Views/IngredientDisplay'; 
+import TagContainer from '../Containers/TagContainer';
 
 import Styles from '../../styles/modalStyles.css'
+
+
 
 const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, addRecipe }) => {
   const ingredients = newRecipe.ingredients.map((ingredient, i) => {
     return <IngredientDisplay name={ingredient.name} amount={ingredient.amount} id={i} key={`new_ingredient_${i}`} />
   })
+
   return (
     <div className='modal-container'>
       <div className='modal' id='newRecipe'>
@@ -72,21 +76,7 @@ const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredi
               </ul>
             </li>
             <li>
-              <header className='header'>
-                Tags
-              </header>
-              <ul id='tags-container'>
-                {/* hard-coded for now, will add later on */}
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-              </ul>
+              <TagContainer />
             </li>
             <li>
               <label htmlFor='add-notes' aria-hidden='true'>Notes</label>
