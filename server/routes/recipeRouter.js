@@ -27,8 +27,8 @@ router.post('/:day',
 );
 
 // updates how many recipes are in each day
-router.put('/day/:day',
-  weekdayController.updateDay,
+router.put('/day',
+  weekdayController.updateDays,
   weekdayController.getDays,
   (req, res) => res.status(200).json({
     days: [...res.locals.days]

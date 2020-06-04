@@ -40,30 +40,23 @@ weekdayController.getDays = (req, res, next) => {
   })
 }
 
-weekdayController.updateDay = (req, res, next) => {
-  const { day } = req.params; 
-  const { id } = req.body; 
+weekdayController.updateDays = async (req, res, next) => {
 
-  console.log('day in request is :', day);
-  console.log('id in request is: ', id)
+  console.log('what I was sent :', req.body);
 
-  Weekday.findOneAndUpdate(
-    { day },
-    { $pull: {
-      recipes : { _id : id }
-      }
-    },
-    (err, found) => {
+  await req.body.forEach(weekday => {
+    const { _id, recipes, day } = weekday; 
+
+    Weekday.findByIdAndUpdate(_id, { recipes }, {new: true}, (err, data) => {
       if (err) return next({
-        log: `Error at Weekday.updateDay. Error : ${err}`,
-        message: 'An error occured, check surver log for details'
+        log: `Error at Weekday.updateDays. Error : ${err}`,
+          message: 'An error occured, check surver log for details'
       });
+      console.log('updated data :', data)
+    })
+  })
 
-      console.log('found :', found)
-      return next();
-    }
-  )
-  
+  return next();
 }
 
 module.exports = weekdayController; 

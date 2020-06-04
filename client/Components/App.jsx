@@ -5,6 +5,7 @@ import RecipeSearch from './Modals/RecipeSearch';
 import NewRecipe from './Modals/NewRecipe';
 import ViewRecipe from './Modals/ViewRecipe';
 import EditRecipe from './Modals/EditRecipe';
+import Controls from './Containers/Controls';
 import bodyStyles from '../styles/mainPageStyles.css';
 
 
@@ -56,6 +57,7 @@ class App extends Component {
     this.deleteRecipe = this.deleteRecipe.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
     this.toggleTag = this.toggleTag.bind(this);
+    this.saveCalendar = this.saveCalendar.bind(this);
   }
 
   componentDidMount() {
@@ -128,6 +130,12 @@ class App extends Component {
 
   addRecipe(e){
     e.preventDefault();
+
+    // we need to add the new tags to the new recipe we are creating
+    const newRecipe = {
+      ...this.state.newRecipe,
+      tags: this.state.newTags
+    }
   
     // make Post request, putting current day in params, and sending the new recipe
     fetch(`http://${domain}/recipes/${this.state.dayInFocus}`, {
@@ -135,7 +143,7 @@ class App extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.state.newRecipe)
+      body: JSON.stringify(newRecipe)
     })
       .then(res => res.json())
     // post sends back all the current recipes, so reset state to be whatever comes back
@@ -147,71 +155,67 @@ class App extends Component {
       })
       .catch(err => console.log(err))
     
-    // so components don't render before they are ready
-    this.setState({
-      fetching: true
+      this.setState({
+        // so components don't render before they are ready
+        fetching: true,
+        // reset new Recipe and new Tags
+        newRecipe: {
+          title: '',
+          recipe: '',
+          ingredients: [],
+          notes: '',
+          favorite: false,
+          tags: []
+        },
+        newTags : []
     })
   }
 
   // removes recipe from UI
   removeRecipe(e, dayId, id){
-    // go through days in state, delete it from state, then update DB
     e.preventDefault();
     e.stopPropagation();
+    // go through days in state, then delete it
+    // do this by push all but the targeted day as is onto an array
+    // at the target day, we are going to do the same thing, but with the recipe list
+    // after we've reset the recipe list on the targeted way, we will push that day onto the array, then add it to our state
 
-    // go through days array, looking for desired day
-    // then go through recipes array, making a copy of the array minus the selected recipe
-    const newDays = this.state.days.map(day => {
-      if (dayId === day.day) {
-        
-        const newRecipeList = day.recipes.map(recipe => {
-          if (recipe === id) {
-            return;
-          };
-          return recipe
+    const newState = [];
+
+    this.state.days.forEach(day => {
+     
+      if(day.day === dayId) {
+        console.log('im inside!!')
+        const recipes = [];
+
+        day.recipes.forEach(recipe => {
+          if (recipe === id) return;;
+          recipes.push(recipe);
         })
 
-        return {
-          ...day, 
-          recipes: newRecipeList};
-
-      } else {
-        return day; 
-      }
+        // after re-setting recipes, put it onto the current day, and push day onto newState
+        day.recipes = recipes
+      } 
+      
+      newState.push(day); 
+      
     })
-    // update state 
+
     this.setState({
-      days: newDays
-    });
+      days: newState
+    })
+    
 
-    // // // update database
-    // fetch(`http://${domain}/recipes/day/${dayId}`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     id : id
-    //   })
-    // })
-    //   .then(res => res.json())
-    // // put sends back all the current recipes, so reset state to be whatever comes back
-    //   .then(data => {
-    //     this.setState({
-    //       fetching: false,
-    //       ...data
-    //     });
-    //   })
-    //   .catch(err => console.log(err))
-
-    // // set "fetching to be true" so components don't try to render
-    // this.setState({
-    //   fetching: true
-    // })
   }
 
   editRecipe(e){
     e.preventDefault();
+
+  // combine new tags into recipe
+    const newRecipe = {
+      ...this.state.newRecipe,
+      tags: this.state.newTags
+    }
   
     // make Put, passing in _id of desired recipe, stored in state.recipeInFocus
     fetch(`http://${domain}/recipes/${this.state.recipeInFocus._id}`, {
@@ -219,7 +223,7 @@ class App extends Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(this.state.newRecipe)
+      body: JSON.stringify(newRecipe)
     })
       .then(res => res.json())
     // post sends back all the current recipes, so reset state to be whatever comes back
@@ -244,6 +248,34 @@ class App extends Component {
   // deletes ar ecipe
   deleteRecipe(){
 
+  }
+
+  saveCalendar(e){
+    // sends the current days data to the server and updates it
+    e.preventDefault();
+    e.stopPropagation();
+
+    fetch(`http://${domain}/recipes/day`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state.days)
+    })
+      .then(res => res.json())
+    // put sends back all the current recipes, so reset state to be whatever comes back
+      .then(data => {
+        this.setState({
+          fetching: false,
+          ...data
+        });
+      })
+      .catch(err => console.log(err))
+
+    // set "fetching to be true" so components don't try to render
+    this.setState({
+      fetching: true
+    })
   }
 
   closeModal(e){
@@ -281,7 +313,7 @@ class App extends Component {
           updateNewIngredient={this.updateNewIngredient}
           addNewIngredient={this.addNewIngredient}
           editRecipe={this.editRecipe}
-          tags={this.state.tags}
+          tags={this.state.newTags}
           toggleTag={this.toggleTag}
           />
       default:
@@ -328,8 +360,8 @@ class App extends Component {
       newRecipe: {
         ...this.state.recipeInFocus,
         ingredients: [...this.state.recipeInFocus.ingredients],
-        tags: [...this.state.recipeInFocus.tags]
       },
+      newTags: [...this.state.recipeInFocus.tags]
     })
   }
 
@@ -374,15 +406,29 @@ class App extends Component {
     // show loader if fetching for data
     const modal = this.getModal(); 
 
+    const controls = 
+      <div id='controls-container' className='flex'>
+        <button class='submit' id='save-calendar' onClick={this.saveCalendar}>Save Calendar</button>
+        <button class='submit' id='get-list' onClick={this.getShoppingList}>Get Shopping List</button>
+      </div>
+
     const display = this.state.fetching 
+    // show loader if fetching data, otherwise show display
       ? <Loader />
-      : <DaysContainer 
-          recipes={this.state.recipes} 
-          days={this.state.days} 
-          toggleRecipeSearch = {this.toggleRecipeSearch}
-          toggleViewRecipe={this.toggleViewRecipe}
-          removeRecipe={this.removeRecipe}
-          />
+      : <>
+          <DaysContainer 
+            recipes={this.state.recipes} 
+            days={this.state.days} 
+            toggleRecipeSearch = {this.toggleRecipeSearch}
+            toggleViewRecipe={this.toggleViewRecipe}
+            removeRecipe={this.removeRecipe}
+            />
+          {/* these two buttons save the current state of the calendar, or generate the user's shopping list */}
+          <Controls 
+            getShoppingList={this.getShoppingList}
+            saveCalendar={this.saveCalendar}
+            />
+        </>
 
     return (
       <div className='app'>

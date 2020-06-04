@@ -1,7 +1,8 @@
 import React from 'react'
 import IngredientDisplay from '../Views/IngredientDisplay';
+import TagContainer from '../Containers/TagContainer';
 
-const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, editRecipe, deleteRecipe }) => {
+const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, editRecipe, deleteRecipe, toggleTag, tags  }) => {
   const ingredients = newRecipe.ingredients.map((ingredient, i) => {
     return <IngredientDisplay name={ingredient.name} amount={ingredient.amount} id={i} key={`new_ingredient_${i}`} />
   })
@@ -70,21 +71,9 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
               </ul>
             </li>
             <li>
-              <header className='header'>
-                Tags
-              </header>
-              <ul id='tags-container'>
-                {/* hard-coded for now, will add later on */}
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-                <button>TAG</button>
-              </ul>
+            <li>
+              <TagContainer toggleTag={toggleTag} tags={tags}/>
+            </li>
             </li>
             <li>
               <label htmlFor='add-notes' aria-hidden='true'>Notes</label>
@@ -95,7 +84,7 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
               </textarea>
             </li>
             <div className='flex'>
-              <button type='submit' className='submit' id='add-recipe'>Edit Recipe</button>
+              <button type='submit' className='submit' id='add-recipe'>Save</button>
               <button type='submit' className='submit delete' id='add-recipe' onClick={deleteRecipe}>Delete Recipe</button>
             </div>
           </ul>
