@@ -25,6 +25,7 @@ class App extends Component {
         name: '',
         amount: ''
       },
+      newTags: [],
       newRecipe: {
         title: '',
         recipe: '',
@@ -54,6 +55,7 @@ class App extends Component {
     this.removeRecipe = this.removeRecipe.bind(this);
     this.deleteRecipe = this.deleteRecipe.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
+    this.toggleTag = this.toggleTag.bind(this);
   }
 
   componentDidMount() {
@@ -265,7 +267,10 @@ class App extends Component {
           newIngredient={this.state.newIngredient}
           updateNewIngredient={this.updateNewIngredient}
           addNewIngredient={this.addNewIngredient}
-          addRecipe={this.addRecipe}/>
+          addRecipe={this.addRecipe}
+          tags={this.state.newTags}
+          toggleTag={this.toggleTag}
+          />
       case 'ViewRecipe':
         return <ViewRecipe recipe={this.state.recipeInFocus} toggleEditRecipe={this.toggleEditRecipe}/>
       case 'EditRecipe':
@@ -275,7 +280,10 @@ class App extends Component {
           newIngredient={this.state.newIngredient}
           updateNewIngredient={this.updateNewIngredient}
           addNewIngredient={this.addNewIngredient}
-          editRecipe={this.editRecipe}/>
+          editRecipe={this.editRecipe}
+          tags={this.state.tags}
+          toggleTag={this.toggleTag}
+          />
       default:
         return '';
     }
@@ -334,6 +342,30 @@ class App extends Component {
         })
       };
     };
+  }
+
+  toggleTag(e, name){
+    e.preventDefault();
+    // either add new tag to tags in newTags array if it's not there already
+    // or make a new copy of the tags array, minus the passed in tag
+    let newTags = []; 
+
+    if (this.state.newTags.includes(name)) {
+
+      this.state.newTags.forEach(tag => {
+        // only pushing to newTags the tags that don't match the passed in name
+        if (tag !== name) {
+          newTags.push(tag);
+        } 
+      });
+    } else  {
+      // making copy of state, with passed in name at the end
+      newTags = [...this.state.newTags, name];
+    };;
+
+    this.setState({
+      newTags: newTags
+    });
   }
 
   

@@ -6,7 +6,7 @@ import Styles from '../../styles/modalStyles.css'
 
 
 
-const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, addRecipe }) => {
+const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, addRecipe, toggleTag, tags }) => {
   const ingredients = newRecipe.ingredients.map((ingredient, i) => {
     return <IngredientDisplay name={ingredient.name} amount={ingredient.amount} id={i} key={`new_ingredient_${i}`} />
   })
@@ -76,7 +76,7 @@ const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredi
               </ul>
             </li>
             <li>
-              <TagContainer />
+              <TagContainer toggleTag={toggleTag} tags={tags}/>
             </li>
             <li>
               <label htmlFor='add-notes' aria-hidden='true'>Notes</label>
