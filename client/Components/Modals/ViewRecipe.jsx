@@ -3,7 +3,14 @@ import IngredientDisplay from '../Views/IngredientDisplay';
 
 const ViewRecipe = ({ recipe, toggleEditRecipe }) => {
   const ingredients = recipe.ingredients.map((ingredient, i) => {
-    return <IngredientDisplay name={ingredient.name} amount={ingredient.amount} id={i} key={`new_ingredient_${i}`} />
+    return (
+      <IngredientDisplay 
+        name={ingredient.name} 
+        amount={ingredient.amount} 
+        unit={ingredient.unit}
+        id={i} 
+        key={`new_ingredient_${i}`} />
+    )
   })
 
   return (

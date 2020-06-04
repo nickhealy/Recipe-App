@@ -24,7 +24,8 @@ class App extends Component {
       fetching: true,
       newIngredient: {
         name: '',
-        amount: ''
+        amount: '',
+        unit: ''
       },
       newTags: [],
       newRecipe: {
@@ -58,6 +59,7 @@ class App extends Component {
     this.editRecipe = this.editRecipe.bind(this);
     this.toggleTag = this.toggleTag.bind(this);
     this.saveCalendar = this.saveCalendar.bind(this);
+    this.clearFields = this.clearFields.bind(this);
   }
 
   componentDidMount() {
@@ -123,7 +125,8 @@ class App extends Component {
       },
       newIngredient: {
         name: '',
-        amount: ''
+        amount: '',
+        unit: ''
       }
     })
   }
@@ -278,13 +281,37 @@ class App extends Component {
     })
   }
 
+  clearFields(){
+    console.log('clearing! ')
+    this.setState({
+      dayInFocus: '',
+      recipeInFocus: '',
+      newIngredient: {
+        name: '',
+        amount: '',
+        unit: ''
+      },
+      newTags: [],
+      newRecipe: {
+        title: '',
+        recipe: '',
+        ingredients: [],
+        notes: '',
+        favorite: false,
+        tags: []
+      },
+    })
+  }
+
   closeModal(e){
     if (this.state.modalVisible && e.target.className === 'modal-container') {
       console.log('closing modal')
       this.setState({
         modalVisible: false 
       })
+      this.clearFields();
     }
+
   }
 
   getModal() {

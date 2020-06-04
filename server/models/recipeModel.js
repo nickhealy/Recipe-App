@@ -12,7 +12,8 @@ const recipeSchema = new Schema({
   ingredients: [
     {
       name: String,
-      amount: String
+      amount: String,
+      unit: String
     }
   ],
   tags: [String],

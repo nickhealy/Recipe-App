@@ -1,11 +1,9 @@
 import React from 'react'
-import IngredientDisplay from '../Views/IngredientDisplay';
+import IngredientInput from '../Containers/IngredientInput';
 import TagContainer from '../Containers/TagContainer';
 
 const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, editRecipe, deleteRecipe, toggleTag, tags  }) => {
-  const ingredients = newRecipe.ingredients.map((ingredient, i) => {
-    return <IngredientDisplay name={ingredient.name} amount={ingredient.amount} id={i} key={`new_ingredient_${i}`} />
-  })
+  
   return (
     <div className='modal-container'>
       <div className='modal' id='editRecipe'>
@@ -39,41 +37,14 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
               </input>
             </li>
             {/* INGREDIENTS -- a separate list of components rendered from state passed through props */}
-            <li>
-              <header className='header'>
-                Ingredients
-                <button className='btn new-ingredient' onClick={addNewIngredient}>+</button>
-              </header>
-              <ul id='ingredients-container'>
-                <li>
-                  <label htmlFor='add-name' aria-hidden='true'>Ingredient Name</label>
-                  <input 
-                    type='text' 
-                    id='add-name' 
-                    name='recipe_name' 
-                    placeholder="e.g. 'Flour', 'Paprika'"
-                    value={newIngredient.name}
-                    onChange={(e) => updateNewIngredient('name', e.target.value)}>
-                  </input>
-                </li>
-                <li>
-                  <label htmlFor='add-ingredient-amount' aria-hidden='true'>Amount</label>
-                  <input 
-                    type='text' 
-                    id='add-ingredient-amount' 
-                    name='recipe_link' 
-                    placeholder="e.g. 'lbs', 'oz.'"
-                    value={newIngredient.amount}
-                    onChange={(e) => updateNewIngredient('amount', e.target.value)}>
-                  </input>
-                </li>
-                <ul id='ingredient-list'>{ingredients}</ul>
-              </ul>
-            </li>
-            <li>
+            <IngredientInput 
+              newIngredient={newIngredient} 
+              updateNewIngredient={updateNewIngredient} 
+              addNewIngredient={addNewIngredient} 
+              newRecipe={newRecipe}
+              />
             <li>
               <TagContainer toggleTag={toggleTag} tags={tags}/>
-            </li>
             </li>
             <li>
               <label htmlFor='add-notes' aria-hidden='true'>Notes</label>
