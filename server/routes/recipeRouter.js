@@ -35,6 +35,16 @@ router.put('/day',
   })
 )
 
+router.put('/:day/:id', 
+  weekdayController.addToDay,
+  weekdayController.getDays,
+  recipeController.getRecipes,
+  (req, res) => res.status(200).json({
+    recipes : [...res.locals.recipes],
+    days: [...res.locals.days]
+  })
+)
+
 // deletes recipe from db
 router.delete('/:id', 
   (req, res, next) => { 

@@ -6,6 +6,7 @@ import NewRecipe from './Modals/NewRecipe';
 import ViewRecipe from './Modals/ViewRecipe';
 import EditRecipe from './Modals/EditRecipe';
 import Controls from './Containers/Controls';
+import ViewSearchedRecipe from './Views/ViewSearchedRecipe';
 import bodyStyles from '../styles/mainPageStyles.css';
 
 
@@ -22,6 +23,7 @@ class App extends Component {
       modalVisible: false,
       modal: '', 
       fetching: true,
+      currentSearch: '',
       newFavorite: false,
       newIngredient: {
         name: '',
@@ -46,15 +48,18 @@ class App extends Component {
     this.toggleNewRecipe = this.toggleNewRecipe.bind(this);
     this.toggleViewRecipe = this.toggleViewRecipe.bind(this);
     this.toggleEditRecipe = this.toggleEditRecipe.bind(this);
+    this.toggleViewSearchedRecipe = this.toggleViewSearchedRecipe.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.getModal = this.getModal.bind(this);
     this.setDayInFocus = this.setDayInFocus.bind(this);
     this.getRecipeInfo = this.getRecipeInfo.bind(this);
     this.updateNewRecipe = this.updateNewRecipe.bind(this);
     this.updateNewIngredient = this.updateNewIngredient.bind(this);
+    this.updateCurrentSearch = this.updateCurrentSearch.bind(this);
     this.addNewIngredient = this.addNewIngredient.bind(this);
     this.populateCalendar = this.populateCalendar.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
+    this.addRecipeFromSearch = this.addRecipeFromSearch.bind(this);
     this.removeRecipe = this.removeRecipe.bind(this);
     this.deleteRecipe = this.deleteRecipe.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
@@ -90,7 +95,7 @@ class App extends Component {
      .catch(err => console.log(err)); 
   }
 
-  setDayInFocus(day) {
+  setDayInFocus(day = '') {
     console.log('setting day to :', day)
     this.setState({
       dayInFocus : day
@@ -114,6 +119,12 @@ class App extends Component {
         ...this.state.newIngredient,
         [field]: value
       }
+    })
+  }
+
+  updateCurrentSearch(value) {
+    this.setState({
+      currentSearch: value
     })
   }
 
@@ -167,6 +178,37 @@ class App extends Component {
         modalVisible: false
       })
       this.clearFields();
+  }
+
+  addRecipeFromSearch(e) {
+    e.preventDefault; 
+
+    // send PUT request to DB, passing in BOTH current day, and desired id to submit
+    fetch(`http://${domain}/recipes/${this.state.dayInFocus}/${this.state.recipeInFocus._id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then(res => res.json())
+    // post sends back all the current recipes, so reset state to be whatever comes back
+      .then(data => {
+        console.log('just got back :  ', data)
+        this.setState({
+          fetching: false,
+          ...data
+        });
+      })
+      .catch(err => console.log(err))
+    
+    // so components don't render before they are ready
+    this.setState({
+      fetching: true,
+      recipeInFocus: '',
+      // remember to close modal
+      modalVisible: false
+    })
+
   }
 
   // removes recipe from UI
@@ -247,7 +289,8 @@ class App extends Component {
   // deletes a recipe
   deleteRecipe(e, id){
     // remove recipe from UI first
-    this.removeRecipe(e, id);
+    // day in Focus will be set to current day we are looking at
+    this.removeRecipe(e, id, this.state.dayInFocus);
 
     // clear fields
     this.clearFields(); 
@@ -309,8 +352,10 @@ class App extends Component {
   }
 
   clearFields(){
-    console.log('clearing! ')
+    console.log('fields cleared!!!')
+    // clears all fields relevant to modal inputs, fired usually after closing a modal
     this.setState({
+      currentSearch: '',
       dayInFocus: '',
       recipeInFocus: '',
       newIngredient: {
@@ -345,7 +390,15 @@ class App extends Component {
     // returns the JSX element that corresponds to currently selected modal
     switch(this.state.modal) {
       case 'RecipeSearch':
-        return <RecipeSearch toggleNewRecipe={this.toggleNewRecipe}/>;
+        return <RecipeSearch 
+          toggleNewRecipe={this.toggleNewRecipe}
+          currentSearch={this.state.currentSearch}
+          updateCurrentSearch={this.updateCurrentSearch}
+          tags={this.state.newTags}
+          toggleTag={this.toggleTag}
+          recipes={this.state.recipes}
+          toggleViewSearchedRecipe={this.toggleViewSearchedRecipe}
+          />;
       case 'NewRecipe':
         return <NewRecipe 
           newRecipe={this.state.newRecipe} 
@@ -374,6 +427,13 @@ class App extends Component {
           day={this.state.dayInFocus}
           toggleFavorites={this.toggleFavorites}
           />
+      case 'ViewSearchedRecipe':
+        return <ViewSearchedRecipe 
+          recipe={this.state.recipeInFocus} 
+          toggleEditRecipe={this.toggleEditRecipe}
+          addRecipeFromSearch={this.addRecipeFromSearch}
+          deleteRecipe={this.deleteRecipe}
+          goBackToSearch={this.goBackToSearch} />
       default:
         return '';
     }
@@ -410,6 +470,18 @@ class App extends Component {
     this.getRecipeInfo(id);
     // set day in focus in case we want to delete it
     this.setDayInFocus(day);
+  }
+
+  toggleViewSearchedRecipe(id) {
+    // toggles view modal specific for after we search for a recipe
+    this.setState({
+      modalVisible: true,
+      modal: 'ViewSearchedRecipe'
+    });
+
+    // passes along so get Recipe info can find recipe specific info
+    this.getRecipeInfo(id);
+
   }
 
   toggleEditRecipe(id) {

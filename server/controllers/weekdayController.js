@@ -5,12 +5,13 @@ const weekdayController = {};
 weekdayController.addToDay = (req, res, next) => {
   // day recipe is added to is pulled out of parameters object
   const { day } = req.params; 
+  const newId = res.locals.newRecipeId || req.params.id
   
   Weekday.findOneAndUpdate(
     { day }, 
     // add id from newly created recipe to recipes array on Weekday table (stored in recipeController)
     { $push: { 
-        recipes: { _id : res.locals.newRecipeId }
+        recipes: { _id : newId }
       }
     }, 
     // return updated day
@@ -31,7 +32,7 @@ weekdayController.removeFromDay = (req, res, next) => {
   const { id } = req.params;
   console.log('want to delete :', id)
   // find day, then update recipes array on that day to exclude the targeted recipe
-  Weekday.findOne({ _id: id}, (err, data) => {
+  Weekday.findOne({ _id: ObjectId(id)}, (err, data) => {
     console.log('this is what I am finding: ', data)
   })
   Weekday.findOneAndUpdate({ _id: id}, 
@@ -75,6 +76,7 @@ weekdayController.updateDays = async (req, res, next) => {
 
   await req.body.forEach(weekday => {
     const { _id, recipes, day } = weekday; 
+    console.log('recipes I have sent')
 
     Weekday.findByIdAndUpdate(_id, { recipes }, {new: true}, (err, data) => {
       if (err) return next({

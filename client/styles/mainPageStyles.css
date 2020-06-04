@@ -25,7 +25,6 @@ body, html, .app {
   --headline-blue: lightblue; 
   --dark-gray: darkgray; 
 }
-
 /* container for recipes */
 
 #daysContainer {
