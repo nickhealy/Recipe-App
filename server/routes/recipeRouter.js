@@ -37,9 +37,18 @@ router.put('/day',
 
 // deletes recipe from db
 router.delete('/:id', 
+  (req, res, next) => { 
+    console.log('routed!');
+    return next();
+  },
   recipeController.deleteRecipe,
+  weekdayController.updateDays,
+  weekdayController.getDays,
   recipeController.getRecipes,
-  (req, res) => res.status(200).json({...res.locals.recipes})
+  (req,res) => res.status(200).json({
+    recipes : [...res.locals.recipes],
+    days: [...res.locals.days]
+  })
 ); 
 
 // updates information on specific recipe

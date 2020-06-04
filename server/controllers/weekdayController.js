@@ -26,6 +26,35 @@ weekdayController.addToDay = (req, res, next) => {
     )
 }
 
+weekdayController.removeFromDay = (req, res, next) => {
+  // get id of targeted receips from params
+  const { id } = req.params;
+  console.log('want to delete :', id)
+  // find day, then update recipes array on that day to exclude the targeted recipe
+  Weekday.findOne({ _id: id}, (err, data) => {
+    console.log('this is what I am finding: ', data)
+  })
+  Weekday.findOneAndUpdate({ _id: id}, 
+    { 
+      // extract from recipes array recipe with same id
+      $pull: {
+        recipes: {
+          _id: id
+        }
+      }
+    }, 
+    { new: true},
+    (err, deleted) => {
+      if (err) return next({
+        log: `Error at Weekday.findOneAndUpdate. Error : ${err}`,
+        message: 'An error occured, check surver log for details'
+      });
+
+      console.log('just deleted: ', deleted)
+      return next();
+    })
+}
+
 weekdayController.getDays = (req, res, next) => {
   // get all days
   Weekday.find({}, (err, days) => {

@@ -2,7 +2,7 @@ import React from 'react'
 import IngredientInput from '../Containers/IngredientInput';
 import TagContainer from '../Containers/TagContainer';
 
-const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, editRecipe, deleteRecipe, toggleTag, tags  }) => {
+const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, editRecipe, deleteRecipe, toggleTag, tags, day  }) => {
   
   return (
     <div className='modal-container'>
@@ -56,7 +56,7 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
             </li>
             <div className='flex'>
               <button type='submit' className='submit' id='add-recipe'>Save</button>
-              <button type='submit' className='submit delete' id='add-recipe' onClick={deleteRecipe}>Delete Recipe</button>
+              <button type='submit' className='submit delete' id='add-recipe' onClick={(e) => deleteRecipe(e, newRecipe._id, day)}>Delete Recipe</button>
             </div>
           </ul>
         </form>

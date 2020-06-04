@@ -89,6 +89,7 @@ class App extends Component {
   }
 
   setDayInFocus(day) {
+    console.log('setting day to :', day)
     this.setState({
       dayInFocus : day
     })
@@ -175,18 +176,18 @@ class App extends Component {
   }
 
   // removes recipe from UI
-  removeRecipe(e, dayId, id){
+  removeRecipe(e, id, dayId){
     e.preventDefault();
     e.stopPropagation();
     // go through days in state, then delete it
     // do this by push all but the targeted day as is onto an array
     // at the target day, we are going to do the same thing, but with the recipe list
     // after we've reset the recipe list on the targeted way, we will push that day onto the array, then add it to our state
-
+    
     const newState = [];
 
     this.state.days.forEach(day => {
-     
+      console.log('in stage one! day.day is :', day.day, 'and dayId is :', dayId)
       if(day.day === dayId) {
         console.log('im inside!!')
         const recipes = [];
@@ -248,9 +249,37 @@ class App extends Component {
     })
   }
 
-  // deletes ar ecipe
-  deleteRecipe(){
+  // deletes a recipe
+  deleteRecipe(e, id){
+    // remove recipe from UI first
+    this.removeRecipe(e, id)
 
+    fetch(`http://${domain}/recipes/${id}`, {
+      method: 'Delete',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.state.days)
+
+    })
+      .then(res => res.json())
+    // post sends back all the current recipes, so reset state to be whatever comes back
+      .then(data => {
+        console.log('just got back :  ', data)
+        this.setState({
+          fetching: false,
+          ...data
+        });
+      })
+      .catch(err => console.log(err))
+    
+    // so components don't render before they are ready
+    this.setState({
+      fetching: true,
+      recipeInFocus: '',
+      // remember to close modal
+      modalVisible: false
+    })
   }
 
   saveCalendar(e){
@@ -342,6 +371,8 @@ class App extends Component {
           editRecipe={this.editRecipe}
           tags={this.state.newTags}
           toggleTag={this.toggleTag}
+          deleteRecipe={this.deleteRecipe}
+          day={this.state.dayInFocus}
           />
       default:
         return '';
@@ -354,6 +385,7 @@ class App extends Component {
       modalVisible: true,
       modal : 'RecipeSearch'
     })
+
     // set day in focus
     this.setDayInFocus(day);
   }
@@ -366,19 +398,25 @@ class App extends Component {
     })
   }
 
-  toggleViewRecipe(id) {
+  toggleViewRecipe(id, day) {
     // toggles modal that will show recipe
+    console.log('day is :', day)
+
     this.setState({
       modalVisible: true,
       modal: 'ViewRecipe'
     });
 
+    console.log('day is :', day)
+
     // passes along so get Recipe info can find recipe specific info
     this.getRecipeInfo(id);
+    // set day in focus
+    this.setDayInFocus(day);
   }
 
   toggleEditRecipe(id) {
-
+    console.log('edit recipe toggled!!')
     this.setState({
       // toggles modal that will allow us to edit recipe
       modalVisible: true,
