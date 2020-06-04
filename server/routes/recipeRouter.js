@@ -18,7 +18,7 @@ router.get('/',
 router.post('/:day', 
   recipeController.addRecipe,
   recipeController.getRecipes,
-  weekdayController.updateDay,
+  weekdayController.addToDay,
   weekdayController.getDays,
   (req, res) => res.status(200).json({
     recipes : [...res.locals.recipes],
@@ -26,16 +26,30 @@ router.post('/:day',
   })
 );
 
+// updates how many recipes are in each day
+router.put('/day/:day',
+  weekdayController.updateDay,
+  weekdayController.getDays,
+  (req, res) => res.status(200).json({
+    days: [...res.locals.days]
+  })
+)
+
+// deletes recipe from db
 router.delete('/:id', 
   recipeController.deleteRecipe,
   recipeController.getRecipes,
   (req, res) => res.status(200).json({...res.locals.recipes})
 ); 
 
+// updates information on specific recipe
 router.put('/:id',
   recipeController.editRecipe,
   recipeController.getRecipes,
   (req, res) => res.status(200).json({...res.locals.recipes})
 );
+
+
+
 
 module.exports = router; 

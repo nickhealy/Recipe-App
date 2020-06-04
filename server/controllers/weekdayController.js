@@ -2,7 +2,7 @@ const { Weekday } = require('../models/index');
 
 const weekdayController = {}; 
 
-weekdayController.updateDay = (req, res, next) => {
+weekdayController.addToDay = (req, res, next) => {
   // day recipe is added to is pulled out of parameters object
   const { day } = req.params; 
   
@@ -38,6 +38,32 @@ weekdayController.getDays = (req, res, next) => {
     res.locals.days = days;
     return next();
   })
+}
+
+weekdayController.updateDay = (req, res, next) => {
+  const { day } = req.params; 
+  const { id } = req.body; 
+
+  console.log('day in request is :', day);
+  console.log('id in request is: ', id)
+
+  Weekday.findOneAndUpdate(
+    { day },
+    { $pull: {
+      recipes : { _id : id }
+      }
+    },
+    (err, found) => {
+      if (err) return next({
+        log: `Error at Weekday.updateDay. Error : ${err}`,
+        message: 'An error occured, check surver log for details'
+      });
+
+      console.log('found :', found)
+      return next();
+    }
+  )
+  
 }
 
 module.exports = weekdayController; 

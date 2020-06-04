@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import IngredientDisplay from '../Views/IngredientDisplay'; 
+
 import Styles from '../../styles/modalStyles.css'
 
-const NewRecipe = ({ newRecipe, updateNewRecipe }) => {
-
+const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, addRecipe }) => {
+  const ingredients = newRecipe.ingredients.map((ingredient, i) => {
+    return <IngredientDisplay name={ingredient.name} amount={ingredient.amount} id={i} key={`new_ingredient_${i}`} />
+  })
   return (
     <div className='modal-container'>
       <div className='modal' id='newRecipe'>
@@ -10,7 +14,7 @@ const NewRecipe = ({ newRecipe, updateNewRecipe }) => {
           New Recipe
           {/* <button className='btn new-recipe' onClick={toggleNewRecipe}>+</button> */}
         </header>
-        <form className='modal-form'>
+        <form className='modal-form' onSubmit={addRecipe}>
           <ul>
             <li>
               <label htmlFor='add-name' aria-hidden='true'>Title of Recipe</label>
@@ -35,10 +39,11 @@ const NewRecipe = ({ newRecipe, updateNewRecipe }) => {
                 placeholder="Where can we find this recipe?">
               </input>
             </li>
+            {/* INGREDIENTS -- a separate list of components rendered from state passed through props */}
             <li>
               <header className='header'>
                 Ingredients
-                <button className='btn new-ingredient'>+</button>
+                <button className='btn new-ingredient' onClick={addNewIngredient}>+</button>
               </header>
               <ul id='ingredients-container'>
                 <li>
@@ -47,13 +52,23 @@ const NewRecipe = ({ newRecipe, updateNewRecipe }) => {
                     type='text' 
                     id='add-name' 
                     name='recipe_name' 
-                    placeholder="e.g. 'Flour', 'Paprika'">
+                    placeholder="e.g. 'Flour', 'Paprika'"
+                    value={newIngredient.name}
+                    onChange={(e) => updateNewIngredient('name', e.target.value)}>
                   </input>
                 </li>
                 <li>
                   <label htmlFor='add-ingredient-amount' aria-hidden='true'>Amount</label>
-                  <input type='text' id='add-ingredient-amount' name='recipe_link' placeholder="e.g. 'lbs', 'oz.'"></input>
+                  <input 
+                    type='text' 
+                    id='add-ingredient-amount' 
+                    name='recipe_link' 
+                    placeholder="e.g. 'lbs', 'oz.'"
+                    value={newIngredient.amount}
+                    onChange={(e) => updateNewIngredient('amount', e.target.value)}>
+                  </input>
                 </li>
+                <ul id='ingredient-list'>{ingredients}</ul>
               </ul>
             </li>
             <li>

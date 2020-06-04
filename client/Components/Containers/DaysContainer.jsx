@@ -4,7 +4,7 @@ import Day from '../Views/Day';
 // for rough-draft purposes
 const dayList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-const DaysContainer = ({ recipes, days, toggleRecipeSearch }) => {
+const DaysContainer = ({ recipes, days, toggleRecipeSearch, toggleViewRecipe, removeRecipe }) => {
   // map the recipes array from the days data onto each day
   
   const calendar = dayList.map((day, i)=> {
@@ -15,6 +15,8 @@ const DaysContainer = ({ recipes, days, toggleRecipeSearch }) => {
       recipeList = {days[i].recipes} 
       recipes={recipes}
       toggleRecipeSearch = {toggleRecipeSearch}
+      toggleViewRecipe = {toggleViewRecipe}
+      removeRecipe={removeRecipe}
       />
     )
   })

@@ -1,7 +1,7 @@
 import React from 'react'
 import RecipeDisplay from './RecipeDisplay';
 
-const Day = ({day, recipeList, recipes, toggleRecipeSearch}) => {
+const Day = ({day, recipeList, recipes, toggleRecipeSearch, toggleViewRecipe, removeRecipe}) => {
   const recipeDisplays = [];
   
   recipeList.forEach(recipeId => {
@@ -10,7 +10,14 @@ const Day = ({day, recipeList, recipes, toggleRecipeSearch}) => {
       // for every matching id in the recipes table from the days table, display another recipe
       if (recipeId === recipe._id) {
         recipeDisplays.push(
-          <RecipeDisplay title={recipe.title} key={recipe._id} />
+          <RecipeDisplay 
+            title={recipe.title} 
+            key={recipe._id} 
+            id={recipe._id} 
+            toggleViewRecipe={toggleViewRecipe}
+            removeRecipe={removeRecipe}
+            day={day}
+            />
         )
       }
     })
