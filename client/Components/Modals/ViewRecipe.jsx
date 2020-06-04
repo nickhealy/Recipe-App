@@ -1,7 +1,9 @@
 import React from 'react';
 import IngredientDisplay from '../Views/IngredientDisplay';
+import Tag from '../Views/Tag';
 
 const ViewRecipe = ({ recipe, toggleEditRecipe }) => {
+  // map ingredients from recipeInFocus into UI
   const ingredients = recipe.ingredients.map((ingredient, i) => {
     return (
       <IngredientDisplay 
@@ -13,11 +15,24 @@ const ViewRecipe = ({ recipe, toggleEditRecipe }) => {
     )
   })
 
+  // map tags from recipeInFocus into UI
+  const tags = recipe.tags.map((tag, i) => {
+    return (
+      <Tag 
+        status={true}
+        name={tag}
+        key={`tag_${name}`}
+        toggleTag={null} />
+    )
+  })
+
   return (
     <div className='modal-container'>
       <div className='modal' id='recipeSearch'>
         <header className='header'>
           {recipe.title}
+          {/* conditionally render favorite's graphic */}
+          {recipe.favorite ? <span className='favorite'>FAV</span> : ''}
           <button onClick={toggleEditRecipe}>Edit</button>
         </header>
           <div id='link-container'>
@@ -27,6 +42,10 @@ const ViewRecipe = ({ recipe, toggleEditRecipe }) => {
         <h3>Ingredients</h3>
         <ul>
           {ingredients}
+        </ul>
+        <h3>Tags</h3>
+        <ul className='tag-container'>
+          {tags}
         </ul>
         <h3>Notes</h3>
         <p><i>{recipe.notes}</i></p>

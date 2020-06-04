@@ -2,14 +2,16 @@ import React from 'react'
 import IngredientInput from '../Containers/IngredientInput';
 import TagContainer from '../Containers/TagContainer';
 
-const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, editRecipe, deleteRecipe, toggleTag, tags, day  }) => {
+const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredient, addNewIngredient, editRecipe, deleteRecipe, toggleFavorites, toggleTag, tags, day, newFavorite  }) => {
   
   return (
     <div className='modal-container'>
       <div className='modal' id='editRecipe'>
         <header className='header'>
           Edit Recipe
-          {/* <button className='btn new-recipe' onClick={toggleNewRecipe}>+</button> */}
+          <button onClick={() => toggleFavorites()}>
+            {newFavorite? 'Remove from Favorites' : 'Add To Favorites'}
+          </button>
         </header>
         <form className='modal-form' onSubmit={(e) => editRecipe(e, newRecipe._id)}>
           <ul>

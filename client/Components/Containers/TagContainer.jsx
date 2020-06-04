@@ -10,7 +10,7 @@ const TagContainer = ({toggleTag, tags}) => {
     return <Tag name={name} toggleTag={toggleTag} key={`tag_${name}`} status={status} />
   })
   return (
-    <ul id='tag-container'>
+    <ul className='tag-container'>
       {tagList}
     </ul>
   )

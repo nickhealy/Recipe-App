@@ -12,6 +12,7 @@ const Day = ({day, recipeList, recipes, toggleRecipeSearch, toggleViewRecipe, re
         recipeDisplays.push(
           <RecipeDisplay 
             title={recipe.title} 
+            favorite={recipe.favorite}
             key={recipe._id} 
             id={recipe._id} 
             toggleViewRecipe={toggleViewRecipe}

@@ -22,6 +22,7 @@ class App extends Component {
       modalVisible: false,
       modal: '', 
       fetching: true,
+      newFavorite: false,
       newIngredient: {
         name: '',
         amount: '',
@@ -58,6 +59,7 @@ class App extends Component {
     this.deleteRecipe = this.deleteRecipe.bind(this);
     this.editRecipe = this.editRecipe.bind(this);
     this.toggleTag = this.toggleTag.bind(this);
+    this.toggleFavorites = this.toggleFavorites.bind(this);
     this.saveCalendar = this.saveCalendar.bind(this);
     this.clearFields = this.clearFields.bind(this);
   }
@@ -162,17 +164,9 @@ class App extends Component {
       this.setState({
         // so components don't render before they are ready
         fetching: true,
-        // reset new Recipe and new Tags
-        newRecipe: {
-          title: '',
-          recipe: '',
-          ingredients: [],
-          notes: '',
-          favorite: false,
-          tags: []
-        },
-        newTags : []
-    })
+        modalVisible: false
+      })
+      this.clearFields();
   }
 
   // removes recipe from UI
@@ -218,7 +212,8 @@ class App extends Component {
   // combine new tags into recipe
     const newRecipe = {
       ...this.state.newRecipe,
-      tags: this.state.newTags
+      tags: this.state.newTags,
+      favorite: this.state.newFavorite
     }
   
     // make Put, passing in _id of desired recipe, stored in state.recipeInFocus
@@ -252,7 +247,10 @@ class App extends Component {
   // deletes a recipe
   deleteRecipe(e, id){
     // remove recipe from UI first
-    this.removeRecipe(e, id)
+    this.removeRecipe(e, id);
+
+    // clear fields
+    this.clearFields(); 
 
     fetch(`http://${domain}/recipes/${id}`, {
       method: 'Delete',
@@ -370,9 +368,11 @@ class App extends Component {
           addNewIngredient={this.addNewIngredient}
           editRecipe={this.editRecipe}
           tags={this.state.newTags}
+          newFavorite={this.state.newFavorite}
           toggleTag={this.toggleTag}
           deleteRecipe={this.deleteRecipe}
           day={this.state.dayInFocus}
+          toggleFavorites={this.toggleFavorites}
           />
       default:
         return '';
@@ -400,23 +400,19 @@ class App extends Component {
 
   toggleViewRecipe(id, day) {
     // toggles modal that will show recipe
-    console.log('day is :', day)
 
     this.setState({
       modalVisible: true,
       modal: 'ViewRecipe'
     });
 
-    console.log('day is :', day)
-
     // passes along so get Recipe info can find recipe specific info
     this.getRecipeInfo(id);
-    // set day in focus
+    // set day in focus in case we want to delete it
     this.setDayInFocus(day);
   }
 
   toggleEditRecipe(id) {
-    console.log('edit recipe toggled!!')
     this.setState({
       // toggles modal that will allow us to edit recipe
       modalVisible: true,
@@ -426,12 +422,13 @@ class App extends Component {
         ...this.state.recipeInFocus,
         ingredients: [...this.state.recipeInFocus.ingredients],
       },
-      newTags: [...this.state.recipeInFocus.tags]
+      newTags: [...this.state.recipeInFocus.tags],
+      newFavorite: this.state.recipeInFocus.favorite
     })
   }
 
   getRecipeInfo(id) {
-    // populates ViewRecipe modal with id-specific information
+    // stores id-specific recipe information in recipeinfocus, so that we can populate our view modal with the recipe information
     for (const key in this.state.recipes) {
       if (this.state.recipes[key]._id === id) {
         this.setState({
@@ -463,6 +460,13 @@ class App extends Component {
     this.setState({
       newTags: newTags
     });
+  }
+
+  toggleFavorites(){
+    // sets boolean in current favorites to be opposite of what it currently is
+    this.setState({
+      newFavorite: !this.state.newFavorite
+    })
   }
 
   
