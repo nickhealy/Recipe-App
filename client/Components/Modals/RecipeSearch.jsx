@@ -13,10 +13,11 @@ const RecipeSearch = ({toggleNewRecipe, toggleViewSearchedRecipe, updateCurrentS
           Add Recipe
           <button className='btn new-recipe' onClick={toggleNewRecipe}>+</button>
         </header>
-        <form>
+        <form className='text-input'>
           <label htmlFor='search-recipes' aria-hidden='true'>Search Recipes</label>
           <input 
             type='text' 
+            className='modal-text-input'
             id='search-recipes' 
             placeholder='Search by Name, Tag, or Ingredient'
             value = {currentSearch.title}

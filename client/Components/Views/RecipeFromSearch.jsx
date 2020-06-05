@@ -1,4 +1,6 @@
 import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
 
 const RecipeFromSearch = ({ title, ingredients, favorite, tags, recipe, notes, toggleViewSearchedRecipe, _id }) => {
 
@@ -6,9 +8,8 @@ const RecipeFromSearch = ({ title, ingredients, favorite, tags, recipe, notes, t
     <li className='search-result flex' onClick={() => toggleViewSearchedRecipe(_id)}>
       <div>
         <b><i>{title}</i></b>
-        {favorite ? <span className='favorite'>F</span> : ''}
+        {favorite ? <FontAwesomeIcon icon={faStar} className='star'/> : ''}
       </div>
-      {tags.length > 0 ? <i>tags: {tags}</i> : ''}
     </li>
   )
 }

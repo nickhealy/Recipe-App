@@ -9,17 +9,15 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
       <div className='modal' id='editRecipe'>
         <header className='header'>
           Edit Recipe
-          <button onClick={() => toggleFavorites()}>
-            {newFavorite? 'Remove from Favorites' : 'Add To Favorites'}
-          </button>
         </header>
         <form className='modal-form' onSubmit={(e) => editRecipe(e, newRecipe._id)}>
           <ul>
-            <li>
+            <li className='input-form-container'>
               <label htmlFor='add-name' aria-hidden='true'>Title of Recipe</label>
               <input 
                 type='text' 
                 id='add-name' 
+                className='modal-text-input'
                 name='recipe_name' 
                 placeholder="What's your recipe called?" 
                 value={newRecipe.title} 
@@ -27,10 +25,11 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
                 required >
               </input>
             </li>
-            <li>
+            <li className='input-form-container'>
               <label htmlFor='add-recipe-link' aria-hidden='true'>Recipe Link</label>
               <input 
                 type='text' 
+                className='modal-text-input'
                 id='add-recipe-link' 
                 name='recipe_link' 
                 value={newRecipe.recipe} 
@@ -48,7 +47,7 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
             <li>
               <TagContainer toggleTag={toggleTag} tags={tags}/>
             </li>
-            <li>
+            <li className='add-notes'>
               <label htmlFor='add-notes' aria-hidden='true'>Notes</label>
               <textarea 
                 placeholder="Is there anything you wished you knew the first time you made this?"
@@ -57,8 +56,11 @@ const EditRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngred
               </textarea>
             </li>
             <div className='flex'>
-              <button type='submit' className='submit' id='add-recipe'>Save</button>
-              <button type='submit' className='submit delete' id='add-recipe' onClick={(e) => deleteRecipe(e, newRecipe._id, day)}>Delete Recipe</button>
+              <button onClick={() => toggleFavorites()} className='submit md' id='add-to-favs'>
+              {newFavorite? 'Remove from Favorites' : 'Add To Favorites'}
+              </button>
+              <button type='submit' className='submit md' id='add-recipe'>Save</button>
+              <button type='submit' className='submit delete md' id='add-recipe' onClick={(e) => deleteRecipe(e, newRecipe._id, day)}>Delete Recipe</button>
             </div>
           </ul>
         </form>

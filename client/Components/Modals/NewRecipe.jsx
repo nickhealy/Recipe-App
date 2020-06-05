@@ -17,9 +17,10 @@ const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredi
         </header>
         <form className='modal-form' onSubmit={addRecipe}>
           <ul>
-            <li>
+            <li class='input-form-container'>
               <label htmlFor='add-name' aria-hidden='true'>Title of Recipe</label>
               <input 
+                className='modal-text-input'
                 type='text' 
                 id='add-name' 
                 name='recipe_name' 
@@ -29,10 +30,11 @@ const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredi
                 required >
               </input>
             </li>
-            <li>
+            <li class='input-form-container'>
               <label htmlFor='add-recipe-link' aria-hidden='true'>Recipe Link</label>
               <input 
                 type='text' 
+                className='modal-text-input'
                 id='add-recipe-link' 
                 name='recipe_link' 
                 value={newRecipe.recipe} 
@@ -50,7 +52,7 @@ const NewRecipe = ({ newRecipe, updateNewRecipe, newIngredient, updateNewIngredi
             <li>
               <TagContainer toggleTag={toggleTag} tags={tags}/>
             </li>
-            <li>
+            <li className='add-notes'>
               <label htmlFor='add-notes' aria-hidden='true'>Notes</label>
               <textarea 
                 placeholder="Is there anything you wished you knew the first time you made this?"

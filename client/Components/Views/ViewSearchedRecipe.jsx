@@ -1,5 +1,7 @@
 import React from 'react';
 import IngredientDisplay from '../Views/IngredientDisplay';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
 import Tag from '../Views/Tag';
 
 const ViewSearchedRecipe = ({ recipe, toggleEditRecipe, addRecipeFromSearch }) => {
@@ -29,30 +31,31 @@ const ViewSearchedRecipe = ({ recipe, toggleEditRecipe, addRecipeFromSearch }) =
   return (
     <div className='modal-container'>
       <div className='modal' id='recipeSearch'>
-        <header className='header'>
-          {recipe.title}
-          {/* conditionally render favorite's graphic */}
-          {recipe.favorite ? <span className='favorite'>FAV</span> : ''}
-          <button onClick={toggleEditRecipe}>Edit</button>
+        <header className='header' id='view-search-header'>
+          <span className='view-searched-header-text'>
+            {recipe.title}
+            {recipe.favorite ? <FontAwesomeIcon className='star' icon={faStar} /> : ''}
+          </span>
         </header>
           <div id='link-container'>
             <i>From {recipe.recipe}</i>
-            <a href={`http://${recipe.recipe}`} target='_blank'><button>Go To Recipe</button></a>
+            <a href={`http://${recipe.recipe}`} target='_blank'><button className='submit full-recipe'>Go To Full Recipe</button></a>
           </div>
-        <h3>Ingredients</h3>
-        <ul>
+        <h3 className="ing-header">{ingredients.length > 0 ? 'Ingredients' : ''}</h3>
+        <ul className='rendered-ing-list'>
           {ingredients}
         </ul>
-        <h3>Tags</h3>
+        <h3 className="ing-header">{tags.length > 0 ? 'Tags' : ''}</h3>
         <ul className='tag-container'>
           {tags}
         </ul>
-        <h3>Notes</h3>
-        <p><i>{recipe.notes}</i></p>
-        <div className='flex'>
-          <button className='submit' onClick={addRecipeFromSearch}>Add Recipe</button>
-          <button className='submit'>Back To Results</button>
+        <h3 className="ing-header">{recipe.notes ? 'Notes' : ''}</h3>
+        <p id='notes'><i>{recipe.notes}</i></p>
+        <div className='btns-container'>
+          <button onClick={toggleEditRecipe} className='submit go-to-edit'>Edit Recipe</button>
+          <button className='submit add-to-cal' onClick={addRecipeFromSearch}>Add Recipe</button>
         </div>
+          <button className='submit go-back'>Back To Results</button>
       </div>
     </div>
   );

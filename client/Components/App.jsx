@@ -7,6 +7,7 @@ import ViewRecipe from './Modals/ViewRecipe';
 import EditRecipe from './Modals/EditRecipe';
 import Controls from './Containers/Controls';
 import ViewSearchedRecipe from './Views/ViewSearchedRecipe';
+import ShoppingList from './Containers/ShoppingList';
 import bodyStyles from '../styles/mainPageStyles.css';
 
 
@@ -67,6 +68,7 @@ class App extends Component {
     this.toggleFavorites = this.toggleFavorites.bind(this);
     this.saveCalendar = this.saveCalendar.bind(this);
     this.clearFields = this.clearFields.bind(this);
+    this.getShoppingList = this.getShoppingList.bind(this);
   }
 
   componentDidMount() {
@@ -433,7 +435,10 @@ class App extends Component {
           toggleEditRecipe={this.toggleEditRecipe}
           addRecipeFromSearch={this.addRecipeFromSearch}
           deleteRecipe={this.deleteRecipe}
-          goBackToSearch={this.goBackToSearch} />
+          goBackToSearch={this.goBackToSearch} 
+          />
+      case 'ShoppingList': 
+        return <ShoppingList days={this.state.days} recipes={this.state.recipes}/>
       default:
         return '';
     }
@@ -496,6 +501,14 @@ class App extends Component {
       },
       newTags: [...this.state.recipeInFocus.tags],
       newFavorite: this.state.recipeInFocus.favorite
+    })
+  }
+
+  // works much the same way as the modal togglers, toggles the modal to show, component takes care of calculation
+  getShoppingList(){
+    this.setState({
+      modalVisible: true,
+      modal: 'ShoppingList'
     })
   }
 

@@ -1,6 +1,8 @@
 import React from 'react';
 import IngredientDisplay from '../Views/IngredientDisplay';
 import Tag from '../Views/Tag';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
 
 const ViewRecipe = ({ recipe, toggleEditRecipe }) => {
   // map ingredients from recipeInFocus into UI
@@ -29,26 +31,26 @@ const ViewRecipe = ({ recipe, toggleEditRecipe }) => {
   return (
     <div className='modal-container'>
       <div className='modal' id='recipeSearch'>
-        <header className='header'>
+        <header className='header view-searched-header-text' id='edit-recipe-header'>
           {recipe.title}
           {/* conditionally render favorite's graphic */}
-          {recipe.favorite ? <span className='favorite'>FAV</span> : ''}
-          <button onClick={toggleEditRecipe}>Edit</button>
+          {recipe.favorite ? <FontAwesomeIcon icon={faStar} className='star'/> : ''}
         </header>
-          <div id='link-container'>
-            <i>From {recipe.recipe}</i>
-            <a href={`http://${recipe.recipe}`} target='_blank'><button>Go To Recipe</button></a>
-          </div>
-        <h3>Ingredients</h3>
-        <ul>
+        <div id='link-container'>
+          <i>From {recipe.recipe}</i>
+          <a href={`http://${recipe.recipe}`} target='_blank'><button className='submit full-recipe'>Go To Recipe</button></a>
+        </div>
+        <h3 className="ing-header">{ingredients.length > 0 ? 'Ingredients' : ''}</h3>
+        <ul className='rendered-ing-list'>
           {ingredients}
         </ul>
-        <h3>Tags</h3>
+        <h3 className="ing-header">{tags.length > 0 ? 'Tags' : ''}</h3>
         <ul className='tag-container'>
           {tags}
         </ul>
-        <h3>Notes</h3>
-        <p><i>{recipe.notes}</i></p>
+        <h3 className="ing-header">{recipe.notes ? 'Notes' : ''}</h3>
+        <p id='notes'><i>{recipe.notes}</i></p>
+        <button onClick={toggleEditRecipe} className='submit go-to-edit' id='edit-btn-view-recipe'>Edit Recipe</button>
       </div>
     </div>
   );

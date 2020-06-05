@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -6,6 +8,7 @@
 }
 
 ul {
+  padding: 0; 
   list-style-type: none;
 }
 
@@ -19,11 +22,24 @@ body, html, .app {
   display: flex;
   justify-content: center;
   position: relative; 
+  font-family: 'Montserrat', sans-serif;
 }
 
 :root {
-  --headline-blue: lightblue; 
-  --dark-gray: darkgray; 
+  --salmon: #F78888;
+  --mustard: #F3D250;
+  --grey: #faf7f7;
+  --light-blue: #90CCf4;
+  --dark-blue: #5da2d5; 
+  --green: rgb(82, 193, 82); 
+}
+
+.hidden {
+  z-index: -100; 
+}
+
+.visible {
+  z-index: 1;
 }
 /* container for recipes */
 
@@ -35,24 +51,33 @@ body, html, .app {
   grid-template-rows: repeat(2, 1fr);
 }
 
+.day-display ul {
+  padding: 0 .5rem; 
+}
+
 .day-display {
   width: 80%;
   height: 15rem; 
-  margin: 1rem .5rem; 
-  border: 1px solid var(--dark-gray); 
+  margin: 1rem .5rem;  
+  background-color: var(--grey);
   border-radius: 5px; 
+  -webkit-box-shadow: 6px 7px 21px -15px rgba(0,0,0,0.75);
+-moz-box-shadow: 6px 7px 21px -15px rgba(0,0,0,0.75);
+box-shadow: 6px 7px 21px -15px rgba(0,0,0,0.75);
 }
 
 .header {
   display: flex; 
   justify-content: center;
+  align-items: center;
   width: 100%; 
-  padding: .5rem;
+  padding: .75rem .5rem;
   background-color: var(--headline-blue);
 }
 
-.day-display ul {
-  padding: .5rem; 
+.day-header {
+  margin-right: 1rem; 
+  margin-left: 1rem;
 }
 
 /* layout specifics for individual cards */
@@ -85,17 +110,73 @@ body, html, .app {
 /* recipeDisplay */
 
 .recipe-display {
-  padding: .3rem; 
+  padding: .4rem; 
+  margin-bottom: .25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: .3rem; 
-  background-color: rgb(224, 255, 245);
-  border-radius: 5px; 
+  background-color: var(--mustard);
+  border-radius: 10px; 
   cursor: pointer;
+  font-size: .75rem; 
+  text-transform: capitalize; 
 }
 
-/* .btn{
-  z-index: 1000; 
-} */
+.btn {
+  height: 1rem; 
+  width: 1rem;  
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; 
+  border: 1px solid black;
+  color: black;
+  background-color: var(--headline-blue);
+}
 
+.add-recipe, .new-recipe, .new-ingredient {
+  height: 1.25rem; 
+  width: 1.25rem; 
+}
+
+.add-recipe:hover, .new-recipe:hover, .new-ingredient:hover {
+  background-color: var(--salmon);
+  cursor: pointer; 
+}
+
+/* CONTROLS */
+
+#controls-container {
+  position: absolute; 
+  bottom: 23%;
+  right: 8%; 
+}
+
+.submit {
+  padding: .5rem;
+  border-radius: 10px;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: none; 
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .85rem; 
+}
+
+#controls-container .submit {
+  background-color: var(--salmon);
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .85rem; 
+}
+
+#controls-container .submit:hover {
+  background-color: var(--dark-blue);
+}
+
+#save-calendar {
+  margin-bottom: .4rem; 
+}

@@ -26,11 +26,11 @@ const Day = ({day, recipeList, recipes, toggleRecipeSearch, toggleViewRecipe, re
   return(
     <div className={`day-display ${day}`}>
       <header className='header'>
-        {day}
+        <h6 class='day-header'>{day}</h6>
         {/* on click, set current modal to be recipe search, pass in current day to later invoke setDayInFocus on it */}
         <button className='btn add-recipe' onClick={() => toggleRecipeSearch(day)}>+</button>
       </header>
-      <ul>
+      <ul class='recipe-list-in-day'>
         {recipeDisplays}
       </ul>
     </div>
